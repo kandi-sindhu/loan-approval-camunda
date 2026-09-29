@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+             xmlns:modeler="http://camunda.org/schema/modeler/1.0"
+             id="Definitions_loanDecision" name="Loan Decision"
+             namespace="http://camunda.org/schema/1.0/dmn"
+             exporter="Camunda Modeler" exporterVersion="5.28.0"
+             modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+  <decision id="loan-decision" name="Loan decision">
+    <decisionTable id="DecisionTable_loan" hitPolicy="FIRST">
+      <input id="Input_score" label="Credit score">
+        <inputExpression id="InputExpression_score" typeRef="number">
+          <text>creditScore</text>
+        </inputExpression>
+      </input>
+      <input id="Input_ratio" label="Loan-to-income ratio">
+        <inputExpression id="InputExpression_ratio" typeRef="number">
+          <text>amount / annualIncome</text>
+        </inputExpression>
+      </input>
+      <output id="Output_decision" label="Decision" name="decision" typeRef="string" />
+      <rule id="Rule_lowScore">
+        <description>Credit score too low</description>
+        <inputEntry id="Rule_lowScore_in1"><text>&lt; 580</text></inputEntry>
+        <inputEntry id="Rule_lowScore_in2"><text>-</text></inputEntry>
+        <outputEntry id="Rule_lowScore_out"><text>"REJECTED"</text></outputEntry>
+      </rule>
+      <rule id="Rule_tooLarge">
+        <description>Loan is larger than a year of income</description>
+        <inputEntry id="Rule_tooLarge_in1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_tooLarge_in2"><text>&gt; 1</text></inputEntry>
+        <outputEntry id="Rule_tooLarge_out"><text>"REJECTED"</text></outputEntry>
+      </rule>
+      <rule id="Rule_autoApprove">
+        <description>Strong credit and affordable loan</description>
+        <inputEntry id="Rule_autoApprove_in1"><text>&gt;= 720</text></inputEntry>
+        <inputEntry id="Rule_autoApprove_in2"><text>&lt;= 0.5</text></inputEntry>
+        <outputEntry id="Rule_autoApprove_out"><text>"APPROVED"</text></outputEntry>
+      </rule>
+      <rule id="Rule_review">
+        <description>Everything else goes to an underwriter</description>
+        <inputEntry id="Rule_review_in1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_review_in2"><text>-</text></inputEntry>
+        <outputEntry id="Rule_review_out"><text>"REVIEW"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_loan">
+      <dmndi:DMNShape id="DMNShape_loanDecision" dmnElementRef="loan-decision">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
